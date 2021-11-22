@@ -1,9 +1,9 @@
 import "./App.css";
-import Signin from "./Components/Signin";
+import ClaimForm from "./Components/ClaimForm";
 function App() {
   return (
     <div className="App">
-      <Signin />
+      <ClaimForm />
     </div>
   );
 }
