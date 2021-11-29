@@ -20,9 +20,8 @@ const schema = yup.object().shape({
   title: yup.string().required("Title should be required"),
   firstName: yup.string().required("First Name should be required"),
   lastName: yup.string().required("Last Name should be required"),
-  dob: yup.string().required("Date of Birthday should be required"),
-  email: yup.string().email().required("Email should be required"),
-  //gender: yup.string().required("Gender should be required")
+  dob: yup.date().required("Date of Birth should be required"),
+  email: yup.string().email().required("Email should be required")
 });
 
 const theme = createTheme();
@@ -37,36 +36,34 @@ const useStyles = makeStyles({
     marginLeft: "1%",
 
 
+  },
+  textfield: {
+    width: "230px",
   }
 });
 
 function ClaimForm() {
-
-  const { register, handleSubmit, errors, reset, control } = useForm({
+  debugger;
+  const { register, handleSubmit, formState: { errors }, reset, control } = useForm({
     resolver: yupResolver(schema),
     mode: "onBlur"
   });
 
 
+  // const submitForm = (data) => {
+  //   alert('data')
+  //   // alert(JSON.stringify(data))
+  //   // localStorage.setItem("formdata",data)
+  // };
   const submitForm = (data) => {
-    debugger;
 
-    //console.log()
+    alert(JSON.stringify(data))
   };
-
-  const resetform = (data) => {
-   // document.getElementsByName("testform").reset();
-   
-   debugger;
-   document.getElementsByName("chk2").checked=false;
-   alert(data);
-  }
-
   const classes = useStyles();
 
   return (
 
-    <Paper>
+    <Paper  >
 
       <Grid item >
         <Typography gutterBottom variant="h4" align="center" color="primary" component="h1">
@@ -76,7 +73,7 @@ function ClaimForm() {
 
       <form name="testform" onSubmit={handleSubmit(submitForm)} onReset={reset}>
 
-        <Grid item >
+      <Grid item >
           <Controller
             name="title"
             control={control}
@@ -87,9 +84,11 @@ function ClaimForm() {
                 <TextField style={{ width: "230px" }}
                   select
                   {...field}
-                  inputRef={ref}
+                  inputRef={register}
                   label="Title"
                   variant="outlined"
+                  error={!!errors?.title?.message}
+                  helperText={errors?.title?.message}
                 >
                   <MenuItem value="">None</MenuItem>
                   <MenuItem value="Mr">Mr</MenuItem>
@@ -101,6 +100,8 @@ function ClaimForm() {
             }}
           />
         </Grid>
+
+
         <br />
         <Grid item >
           <TextField
@@ -128,20 +129,23 @@ function ClaimForm() {
         </Grid>
 
         <br />
-        <Grid item >
+        <Grid item  >
           <Controller
             name="dob"
             control={control}
-            defaultValue={new Date}
+            defaultValue=""
 
             render={({ ref, ...field }) => {
 
               return (
-                <TextField style={{ width: "230px" }}
+                <TextField
+                  className={classes.textfield}
                   variant="outlined"
                   {...field}
                   inputRef={ref}
                   type="date"
+                  error={!!errors?.dob?.message}
+                  helperText={errors?.dob?.message}
                 />
               );
             }}
@@ -168,21 +172,21 @@ function ClaimForm() {
                 value="female"
                 control={<Radio />}
                 label="Female"
-                name="rdo1"
+                name="female"
                 inputRef={register} />
 
               <FormControlLabel
                 value="male"
                 control={<Radio />}
                 label="Male"
-                name="rdo2"
+                name="male"
                 inputRef={register}
               />
               <FormControlLabel
                 value="other"
                 control={<Radio />}
                 label="Other"
-                name="rdo3"
+                name="other"
                 inputRef={register} />
             </RadioGroup>
           </FormControl>
@@ -196,21 +200,21 @@ function ClaimForm() {
                 control={<Checkbox />}
                 label="weeks"
                 inputRef={register}
-                name="chk1"
+                name="weeks"
               />
 
               <FormControlLabel
                 control={<Checkbox />}
                 label="months"
                 inputRef={register}
-                name="chk2"
+                name="months"
               />
 
               <FormControlLabel
                 control={<Checkbox />}
                 label="years"
                 inputRef={register}
-                name="chk3"
+                name="years"
               />
 
             </FormGroup>
@@ -225,7 +229,7 @@ function ClaimForm() {
             </Button>
           </Grid>
           <Grid item xs={12} sm={6} justifyContent="flex-end" container>
-            <Button type="reset" variant="contained" onClick={resetform} color="primary">
+            <Button type="reset" variant="contained" color="primary">
               RESET
             </Button>
           </Grid>
