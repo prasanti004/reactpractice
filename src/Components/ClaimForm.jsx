@@ -1,9 +1,9 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Typography from '@mui/material/Typography';
-import { Grid, TextField, Button, Select, MenuItem,Badge} from '@mui/material';
+import { Grid, TextField, Button, Select, MenuItem, Badge } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { makeStyles } from '@mui/styles';
 import { createTheme } from '@mui/material/styles';
@@ -14,16 +14,15 @@ import FormControl from '@mui/material/FormControl';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
-import * as States from '../Data/States';
-
-
 
 
 const schema = yup.object().shape({
+  title: yup.string().required("Title should be required"),
   firstName: yup.string().required("First Name should be required"),
   lastName: yup.string().required("Last Name should be required"),
+  dob: yup.string().required("Date of Birthday should be required"),
   email: yup.string().email().required("Email should be required"),
-  //stateID: yup.string().stateID().required("stateID should be required")
+  //gender: yup.string().required("Gender should be required")
 });
 
 const theme = createTheme();
@@ -41,142 +40,164 @@ const useStyles = makeStyles({
   }
 });
 
-
-
 function ClaimForm() {
 
-  const { register, handleSubmit, errors, handleInputChange } = useForm({
+  const { register, handleSubmit, errors, reset, control } = useForm({
     resolver: yupResolver(schema),
     mode: "onBlur"
   });
 
 
   const submitForm = (data) => {
-    alert(JSON.stringify(data))
+    debugger;
+
     //console.log()
   };
+
+  const resetform = (data) => {
+   // document.getElementsByName("testform").reset();
+   
+   debugger;
+   document.getElementsByName("chk2").checked=false;
+   alert(data);
+  }
+
   const classes = useStyles();
-
-
-
 
   return (
 
+    <Paper>
 
-      <Paper>
+      <Grid item >
+        <Typography gutterBottom variant="h4" align="center" color="primary" component="h1">
+          ClaimForm
+        </Typography>
+      </Grid>
 
-        <Grid item xs={12}>
-          <Typography gutterBottom variant="h4" align="center" color="primary" component="h1">
-            ClaimForm
-          </Typography>
+      <form name="testform" onSubmit={handleSubmit(submitForm)} onReset={reset}>
+
+        <Grid item >
+          <Controller
+            name="title"
+            control={control}
+            defaultValue=""
+
+            render={({ ref, ...field }) => {
+              return (
+                <TextField style={{ width: "230px" }}
+                  select
+                  {...field}
+                  inputRef={ref}
+                  label="Title"
+                  variant="outlined"
+                >
+                  <MenuItem value="">None</MenuItem>
+                  <MenuItem value="Mr">Mr</MenuItem>
+                  <MenuItem value="Mrs">Mrs</MenuItem>
+                  <MenuItem value="Miss">Miss</MenuItem>
+                  <MenuItem value="Ms">Ms</MenuItem>
+                </TextField>
+              );
+            }}
+          />
+        </Grid>
+        <br />
+        <Grid item >
+          <TextField
+            name="firstName"
+            inputRef={register}
+            type="text"
+            error={!!errors?.firstName?.message}
+            helperText={errors?.firstName?.message}
+            label="First Name"
+          />
         </Grid>
 
-        <form onSubmit={handleSubmit(submitForm)} noValidate>
-          <Grid item xs={12}>
-            <TextField
-              name="firstName"
-              inputRef={register}
-              type="text"
-              error={!!errors?.firstName?.message}
-              helperText={errors?.firstName?.message}
-              label="First Name"
-            />
-          </Grid>
+        <br />
+        <Grid item >
 
-          <br />
-          <Grid item xs={12}>
+          <TextField
+            name="lastName"
+            inputRef={register}
+            type="text"
+            error={!!errors?.lastName?.message}
+            helperText={errors?.lastName?.message}
+            label="Last Name"
+          />
 
-            <TextField
-              name="lastName"
-              inputRef={register}
-              type="text"
-              error={!!errors?.lastName?.message}
-              helperText={errors?.lastName?.message}
-              label="Last Name"
-            />
+        </Grid>
 
-          </Grid>
+        <br />
+        <Grid item >
+          <Controller
+            name="dob"
+            control={control}
+            defaultValue={new Date}
 
+            render={({ ref, ...field }) => {
 
-          <br />
-          <Grid item xs={12}>
-            <TextField
-              name="email"
-              inputRef={register}
-              type="text"
-              error={!!errors?.email?.message}
-              helperText={errors?.email?.message}
-              label="Email"
-            />
-          </Grid>
-          <br />
-          <Grid item xs={12}>
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Gender</FormLabel>
-              <RadioGroup
-                aria-label="gender"
-                name="row-radio-buttons-group"
-
-              >
-                <FormControlLabel
-                  value="female"
-                  control={<Radio />}
-                  label="Female"
-                  name="rdo1"
-                  inputRef={register} />
-
-                <FormControlLabel
-                  value="male"
-                  control={<Radio />}
-                  label="Male"
-                  name="rdo2"
-                  inputRef={register}
+              return (
+                <TextField style={{ width: "230px" }}
+                  variant="outlined"
+                  {...field}
+                  inputRef={ref}
+                  type="date"
                 />
-                <FormControlLabel
-                  value="other"
-                  control={<Radio />}
-                  label="Other"
-                  name="rdo3"
-                  inputRef={register} />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
+              );
+            }}
+          />
+        </Grid>
+        <br />
+        <Grid item >
+          <TextField
+            name="email"
+            inputRef={register}
+            type="text"
+            error={!!errors?.email?.message}
+            helperText={errors?.email?.message}
+            label="Email"
+          />
+        </Grid>
+        <br />
+        <Grid item >
+          <FormControl component="fieldset" >
+            <FormLabel component="legend">Gender</FormLabel>
+            <RadioGroup row>
 
-          {/* <FormControl variant="outlined"
-          >
-            <Select
-              name="state"
-              value="2"
-              label="state"
-              onChange={handleInputChange}
-              inputRef={register}
-            >
+              <FormControlLabel
+                value="female"
+                control={<Radio />}
+                label="Female"
+                name="rdo1"
+                inputRef={register} />
 
-              {States.getStates().map(
-                item => (<MenuItem key={item.id} value={item.id}>{item.title}</MenuItem>)
-              )
-              }
+              <FormControlLabel
+                value="male"
+                control={<Radio />}
+                label="Male"
+                name="rdo2"
+                inputRef={register}
+              />
+              <FormControlLabel
+                value="other"
+                control={<Radio />}
+                label="Other"
+                name="rdo3"
+                inputRef={register} />
+            </RadioGroup>
+          </FormControl>
+        </Grid>
+        <Grid item >
+          <FormControl component="fieldset" >
+            <FormLabel component="legend">Time Period</FormLabel>
 
-            </Select>
-          </FormControl> */}
-
-
-
-          <Grid item xs={12}>
-            <Typography>How long were you unemployed before finding comparable employment elsewhere?</Typography>
-          </Grid>
-          <FormControl className={classes.chkroot}>
-
-
-            <FormGroup>
+            <FormGroup row>
               <FormControlLabel
                 control={<Checkbox />}
                 label="weeks"
                 inputRef={register}
                 name="chk1"
               />
-
-
 
               <FormControlLabel
                 control={<Checkbox />}
@@ -185,7 +206,6 @@ function ClaimForm() {
                 name="chk2"
               />
 
-
               <FormControlLabel
                 control={<Checkbox />}
                 label="years"
@@ -193,34 +213,35 @@ function ClaimForm() {
                 name="chk3"
               />
 
-
-              <FormControlLabel
-                control={<Checkbox />}
-                label="I did not find comparable work"
-                inputRef={register}
-                name="chk4"
-              />
             </FormGroup>
           </FormControl>
+        </Grid>
 
-
-         
-
-
-
-
-
-
-          <br />
-          <Grid item xs={12} justifyContent="flex-end" container>
+        <br />
+        <Grid container >
+          <Grid item xs={12} sm={6} justifyContent="flex-end" container>
             <Button type="submit" variant="contained" color="primary">
               SUBMIT
             </Button>
           </Grid>
-        </form>
+          <Grid item xs={12} sm={6} justifyContent="flex-end" container>
+            <Button type="reset" variant="contained" onClick={resetform} color="primary">
+              RESET
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container xs={12}>
+          <Grid item xs={12} sm={6} justifyContent="flex-end" container>
 
-      </Paper>
-   
+          </Grid>
+          <Grid item xs={12} sm={6} justifyContent="flex-end" container>
+
+          </Grid>
+        </Grid>
+      </form>
+
+    </Paper >
+
 
   );
 }
