@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
+import Stack from '@mui/material/Stack';
 
 
 const schema = yup.object().shape({
@@ -21,11 +22,12 @@ const schema = yup.object().shape({
   firstName: yup.string().required("First Name should be required"),
   lastName: yup.string().required("Last Name should be required"),
   dob: yup.date().required("Date of Birth should be required"),
-  email: yup.string().email().required("Email should be required")
+  email: yup.string().email().required("Email should be required"),
 });
 
 const theme = createTheme();
 const useStyles = makeStyles({
+
   pageContent: {
     marging: theme.spacing(3),
     padding: theme.spacing(3),
@@ -42,28 +44,28 @@ const useStyles = makeStyles({
   }
 });
 
+
+
+
 function ClaimForm() {
-  debugger;
+
   const { register, handleSubmit, formState: { errors }, reset, control } = useForm({
     resolver: yupResolver(schema),
     mode: "onBlur"
   });
 
 
-  // const submitForm = (data) => {
-  //   alert('data')
-  //   // alert(JSON.stringify(data))
-  //   // localStorage.setItem("formdata",data)
-  // };
   const submitForm = (data) => {
-
     alert(JSON.stringify(data))
+    localStorage.setItem("claimformdata", data)
+
   };
+
   const classes = useStyles();
 
   return (
 
-    <Paper  >
+    <Paper style={{ width: "500px" }} >
 
       <Grid item >
         <Typography gutterBottom variant="h4" align="center" color="primary" component="h1">
@@ -73,7 +75,7 @@ function ClaimForm() {
 
       <form name="testform" onSubmit={handleSubmit(submitForm)} onReset={reset}>
 
-      <Grid item >
+        <Grid item >
           <Controller
             name="title"
             control={control}
@@ -81,7 +83,7 @@ function ClaimForm() {
 
             render={({ ref, ...field }) => {
               return (
-                <TextField style={{ width: "230px" }}
+                <TextField className={classes.textfield}
                   select
                   {...field}
                   inputRef={register}
@@ -222,26 +224,16 @@ function ClaimForm() {
         </Grid>
 
         <br />
-        <Grid container >
-          <Grid item xs={12} sm={6} justifyContent="flex-end" container>
-            <Button type="submit" variant="contained" color="primary">
-              SUBMIT
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={6} justifyContent="flex-end" container>
-            <Button type="reset" variant="contained" color="primary">
-              RESET
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid container xs={12}>
-          <Grid item xs={12} sm={6} justifyContent="flex-end" container>
+        <Stack direction="row" justifyContent="flex-end" spacing={2}>
+          <Button type="submit" variant="contained" color="primary">
+            SUBMIT
+          </Button>
+          <Button type="reset" variant="contained" color="primary">
+            RESET
+          </Button>
+        </Stack>
 
-          </Grid>
-          <Grid item xs={12} sm={6} justifyContent="flex-end" container>
-
-          </Grid>
-        </Grid>
+        <br />
       </form>
 
     </Paper >
