@@ -40,10 +40,9 @@ export default function Login() {
    // navigate('/claimform');
 
 
-    const handleSubmit = e => {
-        
+    const handleSubmit = () => {        
        
-       e.navigate('/claimform');
+       navigate('/claimform');
     
     }
 
