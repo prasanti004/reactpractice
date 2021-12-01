@@ -1,6 +1,8 @@
-
+import "./App.css";
 import ClaimForm from "./Components/ClaimForm";
 import ClaimFormDetails from "./Components/ClaimFormDetails";
+import Login from "./Components/Login";
+
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -10,13 +12,13 @@ import {
 
 function App() {
   return (
-    <div >
+    <div className="App">
 
 <Router>
  
         <Routes>
-          <Route exact path="/" element={<ClaimForm/>}/>
-          <Route exact path="/claimformdetails" element={<ClaimFormDetails/>}/>
+          <Route exact path="/" element={<Login/>}/>
+          <Route exact path="/claimform" element={<ClaimFormDetails/>}/>
         </Routes>
      
     </Router>

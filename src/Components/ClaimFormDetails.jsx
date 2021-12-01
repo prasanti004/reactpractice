@@ -28,7 +28,8 @@ const useStyles = makeStyles({
 });
 
 const initialFValues = {
-  
+  userid: '',
+  username: '',
   firstname: '',
   lastname: '',
   email: '',
@@ -68,6 +69,24 @@ const ClaimFormDetails = () => {
     <Form onSubmit={handleSubmit}>
       <Grid container>
         <Grid item xs={6}>
+
+          <TextField
+            variant="outlined"
+            label="UserId"
+            name="userid"
+            value={values.userid}
+            onChange={handleInputChange}
+
+          />
+
+          <TextField
+            variant="outlined"
+            label="UserName"
+            name="username"
+            value={values.username}
+            onChange={handleInputChange}
+
+          />
           <TextField
             variant="outlined"
             label="Firstname"
