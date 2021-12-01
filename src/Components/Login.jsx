@@ -37,7 +37,7 @@ export default function Login() {
         setValue(event.target.value);
     };
     const navigate = useNavigate();
-   // navigate('/claimform');
+  
 
 
     const handleSubmit = () => {        
